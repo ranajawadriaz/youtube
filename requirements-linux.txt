@@ -1,0 +1,31 @@
+# Requirements for Linux/Production Deployment
+
+# Core FastAPI and Web Server
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.20
+
+# PDF Generation
+reportlab>=4.2.5
+Pillow>=10.0.0
+
+# Google Generative AI (Gemini)
+google-genai>=0.8.0
+
+# YouTube and Audio Processing
+yt-dlp>=2024.8.0
+pydub>=0.25.1
+
+# Speech Recognition
+SpeechRecognition>=3.10.0
+
+# HTTP Requests
+requests>=2.31.0
+
+# Audio file handling
+pyaudio>=0.2.14  # For audio input/output (Linux: requires portaudio19-dev)
+
+# Note: FFmpeg must be installed separately on the system
+# Ubuntu/Debian: sudo apt-get install ffmpeg portaudio19-dev
+# CentOS/RHEL: sudo yum install ffmpeg portaudio-devel
+# Alpine: sudo apk add ffmpeg portaudio-dev

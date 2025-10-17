@@ -1,0 +1,43 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# FFmpeg installation
+ffmpeg-8.0-essentials_build/
+ffmpeg/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Temporary files
+temp_downloads/
+temp_pdfs/
+*.txt
+!requirements.txt
+!requirements-linux.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
