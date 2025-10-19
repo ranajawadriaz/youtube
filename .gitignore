@@ -20,6 +20,11 @@ temp_pdfs/
 !requirements.txt
 !requirements-linux.txt
 
+# YouTube cookies (IMPORTANT: Never commit these!)
+cookies.txt
+cookies*.txt
+*.cookies
+
 # IDE
 .vscode/
 .idea/

@@ -1,5 +1,11 @@
 # Enhanced YouTube Transcript Extractor Configuration
 
+# YouTube Cookies Configuration (to bypass bot detection on cloud servers)
+# Export your YouTube cookies to a file named 'cookies.txt' in Netscape format
+# Use browser extension: "Get cookies.txt LOCALLY" or "cookies.txt"
+# Place the file in the project root directory
+COOKIES_FILE = "cookies.txt"  # Path to cookies file (relative or absolute)
+
 # Gemini API Configuration
 # Get your API key from: https://makersuite.google.com/app/apikey
 GEMINI_API_KEY = "AIzaSyDFqnd7vddPTNZjvSLCXZ2xHyOubHlaKlc"  # For transcript cleanup

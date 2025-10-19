@@ -32,14 +32,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class YouTubeTranscriptExtractor:
-    def __init__(self, gemini_api_key: Optional[str] = None):
+    def __init__(self, gemini_api_key: Optional[str] = None, cookies_path: Optional[str] = None):
         """
         Initialize the YouTube Transcript Extractor
         
         Args:
             gemini_api_key: API key for Gemini API (optional, for cleanup feature)
+            cookies_path: Path to cookies.txt file (optional, helps bypass bot detection)
         """
         self.gemini_api_key = gemini_api_key
+        self.cookies_path = cookies_path
         self.recognizer = sr.Recognizer()
         
         # Check FFmpeg availability
@@ -114,6 +116,11 @@ class YouTubeTranscriptExtractor:
                 'no_warnings': True,
                 'skip_download': True,
             }
+            
+            # Add cookies if available
+            if self.cookies_path and os.path.exists(self.cookies_path):
+                ydl_opts['cookiefile'] = self.cookies_path
+                logger.info(f"Using cookies from: {self.cookies_path}")
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=False)
@@ -257,6 +264,11 @@ class YouTubeTranscriptExtractor:
                 'quiet': True,
                 'no_warnings': True,
             }
+            
+            # Add cookies if available
+            if self.cookies_path and os.path.exists(self.cookies_path):
+                ydl_opts['cookiefile'] = self.cookies_path
+                logger.info(f"Using cookies from: {self.cookies_path}")
             
             url = f"https://www.youtube.com/watch?v={video_id}"
             

@@ -1,5 +1,20 @@
 # Linux Production Deployment Guide
 
+## ⚠️ IMPORTANT: YouTube Bot Detection Fix
+
+**If deploying on Digital Ocean or any cloud server**, YouTube will block your requests with "Sign in to confirm you're not a bot" errors. 
+
+**Solution:** You MUST set up browser cookies authentication.
+
+👉 **See [YOUTUBE_COOKIE_SETUP.md](YOUTUBE_COOKIE_SETUP.md) for complete instructions**
+
+Quick summary:
+1. Export YouTube cookies from your browser using a browser extension
+2. Upload `cookies.txt` to your server at `/root/cookies.txt`
+3. The service will automatically use them to bypass bot detection
+
+---
+
 ## System Requirements
 - Ubuntu 20.04+ / Debian 11+ / CentOS 8+ (or compatible)
 - Python 3.10+

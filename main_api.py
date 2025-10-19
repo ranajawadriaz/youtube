@@ -89,7 +89,25 @@ async def generate_transcript_pdf(
         
         # Step 1: Extract YouTube transcript
         logger.info(f"Extracting transcript from: {request.youtube_url}")
-        extractor = YouTubeTranscriptExtractor(gemini_api_key=config.GEMINI_API_KEY)
+        
+        # Check if cookies file exists
+        cookies_path = None
+        if hasattr(config, 'COOKIES_FILE'):
+            cookies_file = config.COOKIES_FILE
+            # Try relative path first
+            if os.path.exists(cookies_file):
+                cookies_path = cookies_file
+            # Try absolute path in /root/ for Linux deployment
+            elif os.path.exists(f"/root/{cookies_file}"):
+                cookies_path = f"/root/{cookies_file}"
+            # Try in project directory
+            elif os.path.exists(os.path.join(os.path.dirname(__file__), cookies_file)):
+                cookies_path = os.path.join(os.path.dirname(__file__), cookies_file)
+        
+        extractor = YouTubeTranscriptExtractor(
+            gemini_api_key=config.GEMINI_API_KEY,
+            cookies_path=cookies_path
+        )
         
         result = extractor.extract_transcript(request.youtube_url)
         transcript, method, metadata = result
