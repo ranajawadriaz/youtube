@@ -1,10 +1,20 @@
 # Enhanced YouTube Transcript Extractor Configuration
 
-# YouTube Cookies Configuration (to bypass bot detection on cloud servers)
-# Export your YouTube cookies to a file named 'cookies.txt' in Netscape format
-# Use browser extension: "Get cookies.txt LOCALLY" or "cookies.txt"
-# Place the file in the project root directory
-COOKIES_FILE = "cookies.txt"  # Path to cookies file (relative or absolute)
+# Proxy Configuration (to bypass YouTube cloud IP blocks)
+# Free proxy lists: https://www.proxy-list.download/HTTP, https://free-proxy-list.net/
+# Format: "http://IP:PORT" or "socks5://IP:PORT"
+USE_PROXY = True  # Set to True to enable proxy rotation
+PROXY_LIST = [
+    "http://168.138.211.5:8080",
+    "http://103.152.112.145:80",
+    "http://195.201.231.178:8080",
+    "http://51.75.206.209:80",
+    "http://149.129.187.190:3128",
+    "http://45.79.27.210:44554",
+    "http://212.33.205.26:80",
+    "http://103.145.133.22:42325",
+]
+PROXY_TIMEOUT = 10  # Seconds to wait for proxy connection
 
 # Gemini API Configuration
 # Get your API key from: https://makersuite.google.com/app/apikey

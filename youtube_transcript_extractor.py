@@ -9,6 +9,7 @@ import re
 import sys
 import tempfile
 import logging
+import random
 from typing import Optional, Tuple
 from urllib.parse import urlparse, parse_qs
 
@@ -32,16 +33,19 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class YouTubeTranscriptExtractor:
-    def __init__(self, gemini_api_key: Optional[str] = None, cookies_path: Optional[str] = None):
+    def __init__(self, gemini_api_key: Optional[str] = None, use_proxy: bool = False, proxy_list: list = None):
         """
         Initialize the YouTube Transcript Extractor
         
         Args:
             gemini_api_key: API key for Gemini API (optional, for cleanup feature)
-            cookies_path: Path to cookies.txt file (optional, helps bypass bot detection)
+            use_proxy: Whether to use proxy rotation (default: False)
+            proxy_list: List of proxy URLs to rotate through
         """
         self.gemini_api_key = gemini_api_key
-        self.cookies_path = cookies_path
+        self.use_proxy = use_proxy
+        self.proxy_list = proxy_list or []
+        self.current_proxy_index = 0
         self.recognizer = sr.Recognizer()
         
         # Check FFmpeg availability
@@ -49,6 +53,15 @@ class YouTubeTranscriptExtractor:
         if not self.ffmpeg_available:
             logger.warning(f"FFmpeg not available: {self.ffmpeg_error}")
             logger.warning("Speech-to-text fallback will not work without FFmpeg")
+    
+    def get_next_proxy(self) -> Optional[str]:
+        """Get next proxy from the rotation list"""
+        if not self.use_proxy or not self.proxy_list:
+            return None
+        
+        proxy = self.proxy_list[self.current_proxy_index]
+        self.current_proxy_index = (self.current_proxy_index + 1) % len(self.proxy_list)
+        return proxy
         
     def extract_video_id(self, url: str) -> Optional[str]:
         """
@@ -117,10 +130,11 @@ class YouTubeTranscriptExtractor:
                 'skip_download': True,
             }
             
-            # Add cookies if available
-            if self.cookies_path and os.path.exists(self.cookies_path):
-                ydl_opts['cookiefile'] = self.cookies_path
-                logger.info(f"Using cookies from: {self.cookies_path}")
+            # Add proxy if enabled
+            proxy = self.get_next_proxy()
+            if proxy:
+                ydl_opts['proxy'] = proxy
+                logger.info(f"Using proxy: {proxy}")
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=False)
@@ -265,10 +279,11 @@ class YouTubeTranscriptExtractor:
                 'no_warnings': True,
             }
             
-            # Add cookies if available
-            if self.cookies_path and os.path.exists(self.cookies_path):
-                ydl_opts['cookiefile'] = self.cookies_path
-                logger.info(f"Using cookies from: {self.cookies_path}")
+            # Add proxy if enabled
+            proxy = self.get_next_proxy()
+            if proxy:
+                ydl_opts['proxy'] = proxy
+                logger.info(f"Using proxy: {proxy}")
             
             url = f"https://www.youtube.com/watch?v={video_id}"
             
