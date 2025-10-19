@@ -128,6 +128,8 @@ class YouTubeTranscriptExtractor:
                 'quiet': True,
                 'no_warnings': True,
                 'skip_download': True,
+                'socket_timeout': 15,
+                'retries': 2,
             }
             
             # Add proxy if enabled
@@ -197,13 +199,25 @@ class YouTubeTranscriptExtractor:
             
             fetched_transcript = None
             
-            # Create API instance
-            api = YouTubeTranscriptApi()
+            # Prepare proxies dict for youtube-transcript-api
+            proxies = None
+            if self.use_proxy and self.proxy_list:
+                proxy_url = self.get_next_proxy()
+                if proxy_url:
+                    proxies = {
+                        'http': proxy_url,
+                        'https': proxy_url,
+                    }
+                    logger.info(f"Using proxy for transcript: {proxy_url}")
             
             # Try different language preferences
             for languages in language_options:
                 try:
-                    fetched_transcript = api.fetch(video_id, languages=languages)
+                    fetched_transcript = YouTubeTranscriptApi.get_transcript(
+                        video_id, 
+                        languages=languages,
+                        proxies=proxies
+                    )
                     logger.info(f"Found transcript in language preference: {languages}")
                     break
                 except (NoTranscriptFound, TranscriptsDisabled):
@@ -212,7 +226,7 @@ class YouTubeTranscriptExtractor:
             # If no preferred language, try any available transcript
             if fetched_transcript is None:
                 try:
-                    transcript_list = api.list(video_id)
+                    transcript_list = YouTubeTranscriptApi.list_transcripts(video_id, proxies=proxies)
                     for transcript in transcript_list:
                         try:
                             fetched_transcript = transcript.fetch()
@@ -277,6 +291,8 @@ class YouTubeTranscriptExtractor:
                 'audioquality': '192K',
                 'quiet': True,
                 'no_warnings': True,
+                'socket_timeout': 15,
+                'retries': 2,
             }
             
             # Add proxy if enabled
