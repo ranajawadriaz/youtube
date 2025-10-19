@@ -19,11 +19,12 @@ temp_pdfs/
 *.txt
 !requirements.txt
 !requirements-linux.txt
+!cookies.txt
 
 # YouTube cookies (IMPORTANT: Never commit these!)
-cookies.txt
-cookies*.txt
-*.cookies
+# cookies.txt - TEMPORARILY ALLOWED FOR DEPLOYMENT
+# cookies*.txt
+# *.cookies
 
 # IDE
 .vscode/
